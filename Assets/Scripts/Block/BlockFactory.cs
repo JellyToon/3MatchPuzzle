@@ -9,9 +9,9 @@ public static class BlockFactory
         BlockInfo blockInfo = new BlockInfo(blockType);
 
         if (blockType == BlockType.BASIC)
-            blockInfo.color = (BlockColor)Random.Range((int)BlockColor.FIRST, (int)BlockColor.NUM);
+            blockInfo.color = (BlockColor)Random.Range(0, (int)BlockColor.NUM);
         else if (blockType == BlockType.EMPTY)
-            blockInfo.color = BlockColor.FIRST;
+            blockInfo.color = BlockColor.RED;
 
         return blockInfo;
     }

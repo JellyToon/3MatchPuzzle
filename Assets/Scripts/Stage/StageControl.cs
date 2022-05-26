@@ -13,6 +13,13 @@ public class StageControl : MonoBehaviour
     [SerializeField] Transform m_cellArea;
     [SerializeField] GameObject m_cellPrefab;
 
+    [SerializeField] Transform m_itemArea;
+    [SerializeField] GameObject m_itemPrefab;
+
+    [SerializeField] Transform m_ItemParent;
+    [SerializeField] GameObject m_boxPrefab;
+    [SerializeField] BOX m_box;
+
     [SerializeField] Text m_text;
 
     private BlockRoot m_blockRoot;
@@ -199,5 +206,58 @@ public class StageControl : MonoBehaviour
                 m_text.text += "X : " + ((BlockColor)(m_trapColor[i-m_stageInfo.clearColorNumCount])).ToString();
         }
         
+    }
+
+    public void AddItem(BlockColor color, Vector3 initPosition)
+    {
+        GameObject go = Instantiate(m_itemPrefab, m_ItemParent);
+        Item item = go.GetComponent<Item>();
+
+        Vector3 position = new Vector3(initPosition.x, initPosition.y, m_ItemParent.position.z);
+
+        item.InitStageControl(this);
+        item.InitPosition(position);
+        item.SetColor(color);
+
+    }
+    public void EatItem(GameObject itemObject)
+    {
+        Item item = itemObject.GetComponent<Item>();
+
+        BlockColor color = item.color;
+
+        foreach(int i in m_clearColor)
+        {
+            if(color == (BlockColor)i)
+            {
+                m_clearCondition[i] -= 1;
+                UpdateUI();
+                Destroy(itemObject);
+                return;
+            }
+        }
+
+        foreach(int i in m_trapColor)
+        {
+            if(color == (BlockColor)i)
+            {
+                m_box.GetDebuffs();
+                Destroy(itemObject);
+                return;
+            }
+        }
+    }
+
+    public void UpdateUI()
+    {
+        m_text.text = "";
+        for (int i = 0; i < m_stageInfo.clearColorNumCount + m_stageInfo.trapColorNumCount; ++i)
+        {
+            if (i < m_stageInfo.clearColorNumCount)
+                m_text.text +=
+                    ((BlockColor)(m_clearColor[i])).ToString() + " : " + m_clearCondition[m_clearColor[i]] + "\n";
+            else
+                m_text.text += "X : " + ((BlockColor)(m_trapColor[i - m_stageInfo.clearColorNumCount])).ToString();
+        }
     }
 }

@@ -126,6 +126,8 @@ public class Block : MonoBehaviour
                 {
                     m_nextState = BlockState.VACANT;
                     m_vanishTimer = -1.0f;
+
+                    m_stagecontrol.AddItem(m_blockInfo.color, this.transform.position);
                 }
                 else
                     m_vanishTimer = 0.0f;
@@ -180,6 +182,7 @@ public class Block : MonoBehaviour
                 case BlockState.VACANT:
                     m_afterPosition = Vector3.zero;
                     this.SetVisible(false);
+
                     break;
                 case BlockState.RESPAWN:
                     m_blockInfo.color = (BlockColor)Random.Range(0, (int)BlockColor.NUM);
@@ -213,6 +216,7 @@ public class Block : MonoBehaviour
         }
 
         Vector3 position = m_blockRoot.CalcBlockPosition(info.position) + m_afterPosition;
+
         this.transform.position = position;
 
         this.SetColor();
@@ -342,7 +346,7 @@ public class Block : MonoBehaviour
         m_afterPosition.y =
             (float)(startPositionY - this.info.position.y) * BlockInfo.COLLISION_SIZE;
         m_nextState = BlockState.FALL;
-        int colorIndex = Random.Range((int)BlockColor.FIRST, (int)BlockColor.LAST);
+        int colorIndex = Random.Range(0, (int)BlockColor.NUM);
         
         this.SetColor((BlockColor)colorIndex);
     }

@@ -19,8 +19,6 @@ public enum BlockColor
     YELLOW  = 4,
     MAGENTA = 5,
     NUM,
-    FIRST = RED,
-    LAST = NUM
 }
 
 public enum BlockState
