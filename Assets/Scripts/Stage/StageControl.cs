@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class StageControl : MonoBehaviour
 {
@@ -21,6 +22,9 @@ public class StageControl : MonoBehaviour
     [SerializeField] BOX m_box;
 
     [SerializeField] Text m_text;
+    //[SerializeField] AudioMgr m_audioMgr;
+
+    public int m_stageNum;
 
     private BlockRoot m_blockRoot;
     public BlockRoot blockRoot { get { return m_blockRoot; } }
@@ -49,14 +53,14 @@ public class StageControl : MonoBehaviour
 
     private void Start()
     {
-        InitStage(2);
+        InitStage();
     }
 
 
 
-    public void InitStage(int stageNum)
+    public void InitStage()
     {
-        m_stageInfo = StageReader.LoadStage(stageNum);
+        m_stageInfo = StageReader.LoadStage(m_stageNum);
 
         m_cellInfos = new CellInfo[m_stageInfo.maxRow, m_stageInfo.maxCol];
         m_blocks = new Block[m_stageInfo.maxRow, m_stageInfo.maxCol];
@@ -213,7 +217,7 @@ public class StageControl : MonoBehaviour
         GameObject go = Instantiate(m_itemPrefab, m_ItemParent);
         Item item = go.GetComponent<Item>();
 
-        Vector3 position = new Vector3(initPosition.x, initPosition.y, m_ItemParent.position.z);
+        Vector3 position = new Vector3(initPosition.x, initPosition.y, -5f);
 
         item.InitStageControl(this);
         item.InitPosition(position);
@@ -230,8 +234,12 @@ public class StageControl : MonoBehaviour
         {
             if(color == (BlockColor)i)
             {
-                m_clearCondition[i] -= 1;
-                UpdateUI();
+                if (m_clearCondition[i] != 0)
+                {
+                    m_clearCondition[i] -= 1;
+                    UpdateUI();
+                    CheckGameClear();
+                }
                 Destroy(itemObject);
                 return;
             }
@@ -258,6 +266,23 @@ public class StageControl : MonoBehaviour
                     ((BlockColor)(m_clearColor[i])).ToString() + " : " + m_clearCondition[m_clearColor[i]] + "\n";
             else
                 m_text.text += "X : " + ((BlockColor)(m_trapColor[i - m_stageInfo.clearColorNumCount])).ToString();
+        }
+    }
+
+    public void CheckGameClear()
+    {
+        int length = m_clearCondition.Length;
+        foreach(int i in m_clearCondition)
+        {
+            if (i > 0) continue;
+            
+            length -= 1;
+        }
+
+        Debug.Log(length);
+        if(length == 0)
+        {
+            SceneManager.LoadScene("Clear");
         }
     }
 }

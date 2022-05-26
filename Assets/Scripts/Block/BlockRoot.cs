@@ -14,8 +14,10 @@ public class BlockRoot : MonoBehaviour
     private CellInfo[,] m_cellInfos;
     private Block[,] m_blocks;
 
-
     private Camera m_mainCamera;
+    [SerializeField]
+    private AudioMgr m_audioMgr;
+
 
     private Block m_grabbedBlock = null;
 
@@ -162,6 +164,7 @@ public class BlockRoot : MonoBehaviour
                     fallStartY += 1;
                 }
             }
+            m_audioMgr.PlayEffectSound();
         } while (false);
 
     }
