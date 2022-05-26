@@ -22,6 +22,8 @@ public class StageControl : MonoBehaviour
     [SerializeField] BOX m_box;
 
     [SerializeField] Text m_text;
+    [SerializeField] Text m_timer;
+    float time = 60f;
     //[SerializeField] AudioMgr m_audioMgr;
 
     public int m_stageNum;
@@ -56,6 +58,14 @@ public class StageControl : MonoBehaviour
         InitStage();
     }
 
+    private void Update()
+    {
+        time -= Time.deltaTime;
+
+        m_timer.text = "Timer : " + ((int)time).ToString();
+        if (time <= 0)
+            SceneManager.LoadScene("GameOver");
+    }
 
 
     public void InitStage()

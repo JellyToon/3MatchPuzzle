@@ -7,8 +7,13 @@ using UnityEngine.SceneManagement;
 public class Title : MonoBehaviour
 {
     public CanvasGroup canvasGroup;
+    public CanvasGroup canvasGroup1;
 
 
+    private void Start()
+    {
+        Screen.SetResolution(1600, 900, false);
+    }
     public void StageLoad(int i)
     {
         string stage = "Stage" + i.ToString();
@@ -21,6 +26,19 @@ public class Title : MonoBehaviour
         canvasGroup.alpha = 1.0f;
         canvasGroup.blocksRaycasts = true;
     }
+
+    public void ClickManualButton()
+    {
+        canvasGroup1.alpha = 1.0f;
+        canvasGroup1.blocksRaycasts = true;
+    }
+
+    public void ClickManualExitButton()
+    {
+        canvasGroup1.alpha = 0.0f;
+        canvasGroup1.blocksRaycasts = false;
+    }
+
 
     public void ClickExitButton()
     {
