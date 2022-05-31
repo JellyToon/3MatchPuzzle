@@ -5,7 +5,7 @@ using UnityEngine;
 public class Block : MonoBehaviour
 {
     BlockRoot m_blockRoot;
-    StageControl m_stagecontrol;
+    StageControl m_stageControl;
     
     [SerializeField]
     DIR4 m_slideDir4 = DIR4.NONE;
@@ -55,8 +55,8 @@ public class Block : MonoBehaviour
     public void InitStageControl(StageControl stageControl)
     {
         m_nextState = BlockState.IDLE;
-        m_stagecontrol = stageControl;
-        m_blockRoot = m_stagecontrol.blockRoot;
+        m_stageControl = stageControl;
+        m_blockRoot = m_stageControl.blockRoot;
     }
     public void InitBlockInfo(BlockInfo blockInfo)
     {
@@ -107,6 +107,8 @@ public class Block : MonoBehaviour
 
     private void Update()
     {
+        if (m_stageControl.Pause == true) return;
+
         if (info.type == BlockType.EMPTY)
         {
             SetColor();
@@ -127,7 +129,7 @@ public class Block : MonoBehaviour
                     m_nextState = BlockState.VACANT;
                     m_vanishTimer = -1.0f;
 
-                    m_stagecontrol.AddItem(m_blockInfo.color, this.transform.position);
+                    m_stageControl.AddItem(m_blockInfo.color, this.transform.position);
                 }
                 else
                     m_vanishTimer = 0.0f;
@@ -285,10 +287,10 @@ public class Block : MonoBehaviour
 
         switch(dir)
         {
-            case DIR4.RIGHT:    offset = v.x; break;
-            case DIR4.LEFT:     offset = -v.x; break;
-            case DIR4.UP:       offset = v.y; break;
-            case DIR4.DOWN:   offset = -v.y; break;
+            case DIR4.RIGHT:    offset = v.x;   break;
+            case DIR4.LEFT:     offset = -v.x;  break;
+            case DIR4.UP:       offset = v.y;   break;
+            case DIR4.DOWN:     offset = -v.y;  break;
         }
 
         return offset;

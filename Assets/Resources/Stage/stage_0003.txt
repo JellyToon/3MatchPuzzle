@@ -1,7 +1,7 @@
 ﻿{
     "maxRow":9,
     "maxCol":9,
-    "clearColorNumCount" : 4,
+    "clearColorNumCount" : 3,
     "trapColorNumCount" : 1,
     "cells":[
                 0,1,1,1,1,1,1,1,0,

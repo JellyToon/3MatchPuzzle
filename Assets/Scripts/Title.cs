@@ -6,13 +6,29 @@ using UnityEngine.SceneManagement;
 
 public class Title : MonoBehaviour
 {
-    public CanvasGroup canvasGroup;
-    public CanvasGroup canvasGroup1;
+    public CanvasGroup m_selectGroup;
+    public CanvasGroup m_manualGroup;
 
+    [SerializeField] SaveData m_saveData;
+    [SerializeField] bool[] m_stage;
+
+    [SerializeField] Button[] m_stageButton;
 
     private void Start()
     {
         Screen.SetResolution(1600, 900, false);
+
+        if (m_saveData == null) return;
+        m_stage = new bool[m_saveData.GetSaveDataLength()];
+        m_stage = m_saveData.GetSaveData();
+
+        for(int i = 0; i<m_stage.Length;++i)
+        {
+            if(m_stage[i] == true)
+                m_stageButton[i].interactable = true;
+            else
+                m_stageButton[i].interactable = false;
+        }
     }
     public void StageLoad(int i)
     {
@@ -23,20 +39,23 @@ public class Title : MonoBehaviour
 
     public void ClickStartButton()
     {
-        canvasGroup.alpha = 1.0f;
-        canvasGroup.blocksRaycasts = true;
+        m_selectGroup.alpha = 1.0f;
+        m_selectGroup.blocksRaycasts = true;
     }
 
     public void ClickManualButton()
     {
-        canvasGroup1.alpha = 1.0f;
-        canvasGroup1.blocksRaycasts = true;
+        m_manualGroup.alpha = 1.0f;
+        m_manualGroup.blocksRaycasts = true;
     }
 
     public void ClickManualExitButton()
     {
-        canvasGroup1.alpha = 0.0f;
-        canvasGroup1.blocksRaycasts = false;
+        m_selectGroup.alpha = 0.0f;
+        m_selectGroup.blocksRaycasts = false;
+        m_manualGroup.alpha = 0.0f;
+        m_manualGroup.blocksRaycasts = false;
+
     }
 
 

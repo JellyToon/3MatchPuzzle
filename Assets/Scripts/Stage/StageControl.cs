@@ -14,15 +14,22 @@ public class StageControl : MonoBehaviour
     [SerializeField] Transform m_cellArea;
     [SerializeField] GameObject m_cellPrefab;
 
-    [SerializeField] Transform m_itemArea;
+    [SerializeField] Transform m_ItemParent;
     [SerializeField] GameObject m_itemPrefab;
 
-    [SerializeField] Transform m_ItemParent;
-    [SerializeField] GameObject m_boxPrefab;
     [SerializeField] BOX m_box;
 
-    [SerializeField] Text m_text;
+    [SerializeField] Transform m_conditionParent;
+    [SerializeField] GameObject m_conditionPrefab;
+    
+    //[SerializeField] Text m_text;
     [SerializeField] Text m_timer;
+    [SerializeField] CanvasGroup m_option;
+    [SerializeField] SaveData m_saveData;
+
+    private bool m_pause;
+    public bool Pause { get { return m_pause; } }
+
     float time = 60f;
     //[SerializeField] AudioMgr m_audioMgr;
 
@@ -39,8 +46,8 @@ public class StageControl : MonoBehaviour
     private CellInfo[,] m_cellInfos;
     private Block[,] m_blocks;
 
-    public List<int> m_clearColor;
-    public List<int> m_trapColor;
+    public List<int> m_clearColors;
+    public List<int> m_trapColors;
     public int[] m_clearCondition = new int[(int)BlockColor.NUM]; 
     //public int[] m_clearCount = new int[(int)BlockColor.NUM];
 
@@ -51,6 +58,7 @@ public class StageControl : MonoBehaviour
         {
             m_clearCondition[i] = -1;
         }
+        m_pause = false;
     }
 
     private void Start()
@@ -60,6 +68,23 @@ public class StageControl : MonoBehaviour
 
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(m_option.alpha == 0)
+            {
+                m_option.alpha = 1;
+                m_option.blocksRaycasts = true;
+            }
+            else
+            {
+                m_option.alpha = 0f;
+                m_option.blocksRaycasts = false;
+            }
+            m_pause = !m_pause;
+        }
+
+        if (m_pause == true) return;
+
         time -= Time.deltaTime;
 
         m_timer.text = "Timer : " + ((int)time).ToString();
@@ -186,14 +211,22 @@ public class StageControl : MonoBehaviour
         int random;
 
         int i = 0;
+
+        GameObject prefab;
+        Condition condition;
         while(i<m_stageInfo.clearColorNumCount)
         {
             random = Random.Range(0, (int)BlockColor.NUM);
             if(m_clearCondition[random] == -1)
             {
                 m_clearCondition[random] = Random.Range(15,20);
-                m_clearColor.Add(random);
+                m_clearColors.Add(random);
                 ++i;
+
+                prefab = Instantiate(m_conditionPrefab, m_conditionParent);
+                condition = prefab.GetComponent<Condition>();
+                condition.InitPrefab((BlockColor)random, m_clearCondition[random].ToString());
+
                 continue;
             }
         }
@@ -204,21 +237,27 @@ public class StageControl : MonoBehaviour
             if(m_clearCondition[random] == -1)
             {
                 m_clearCondition[random] = -2;
-                m_trapColor.Add(random);
+                m_trapColors.Add(random);
                 ++i;
+
+                prefab = Instantiate(m_conditionPrefab, m_conditionParent);
+                condition = prefab.GetComponent<Condition>();
+
+                condition.InitPrefab((BlockColor)random, "µð¹öÇÁ");
+
                 continue;
             }
         }
 
-        m_text.text = "";
-        for(i = 0; i<m_stageInfo.clearColorNumCount + m_stageInfo.trapColorNumCount;++i)
-        {
-            if (i < m_stageInfo.clearColorNumCount)
-                m_text.text +=
-                    ((BlockColor)(m_clearColor[i])).ToString() + " : " + m_clearCondition[m_clearColor[i]] + "\n";
-            else
-                m_text.text += "X : " + ((BlockColor)(m_trapColor[i-m_stageInfo.clearColorNumCount])).ToString();
-        }
+        //m_text.text = "";
+        //for(i = 0; i<m_stageInfo.clearColorNumCount + m_stageInfo.trapColorNumCount;++i)
+        //{
+        //    if (i < m_stageInfo.clearColorNumCount)
+        //        m_text.text +=
+        //            ((BlockColor)(m_clearColor[i])).ToString() + " : " + m_clearCondition[m_clearColor[i]] + "\n";
+        //    else
+        //        m_text.text += "X : " + ((BlockColor)(m_trapColor[i-m_stageInfo.clearColorNumCount])).ToString();
+        //}
         
     }
 
@@ -240,14 +279,14 @@ public class StageControl : MonoBehaviour
 
         BlockColor color = item.color;
 
-        foreach(int i in m_clearColor)
+        foreach(int i in m_clearColors)
         {
             if(color == (BlockColor)i)
             {
                 if (m_clearCondition[i] != 0)
                 {
                     m_clearCondition[i] -= 1;
-                    UpdateUI();
+                    UpdateUI(color, m_clearCondition[i]);
                     CheckGameClear();
                 }
                 Destroy(itemObject);
@@ -255,7 +294,7 @@ public class StageControl : MonoBehaviour
             }
         }
 
-        foreach(int i in m_trapColor)
+        foreach(int i in m_trapColors)
         {
             if(color == (BlockColor)i)
             {
@@ -264,19 +303,25 @@ public class StageControl : MonoBehaviour
                 return;
             }
         }
+
+        Destroy(itemObject);
     }
 
-    public void UpdateUI()
+    public void UpdateUI(BlockColor blockColor, int count)
     {
-        m_text.text = "";
-        for (int i = 0; i < m_stageInfo.clearColorNumCount + m_stageInfo.trapColorNumCount; ++i)
+        var gameObjects = GameObject.FindGameObjectsWithTag("Condition");
+        Condition condition;
+
+        foreach(var go in gameObjects)
         {
-            if (i < m_stageInfo.clearColorNumCount)
-                m_text.text +=
-                    ((BlockColor)(m_clearColor[i])).ToString() + " : " + m_clearCondition[m_clearColor[i]] + "\n";
-            else
-                m_text.text += "X : " + ((BlockColor)(m_trapColor[i - m_stageInfo.clearColorNumCount])).ToString();
+            condition = go.GetComponent<Condition>();
+            if(blockColor == condition.color)
+            {
+                condition.UpdateUI(count);
+                return;
+            }
         }
+
     }
 
     public void CheckGameClear()
@@ -289,10 +334,20 @@ public class StageControl : MonoBehaviour
             length -= 1;
         }
 
-        Debug.Log(length);
         if(length == 0)
         {
-            SceneManager.LoadScene("Clear");
+            m_saveData.SetSaveDataTrue(m_stageNum + 1);
+            GoToScene("Clear");
         }
+    }
+
+    public void GoToScene(string name)
+    {
+        SceneManager.LoadScene(name);
+    }
+
+    public void ExitButtonClick()
+    {
+        Application.Quit();
     }
 }

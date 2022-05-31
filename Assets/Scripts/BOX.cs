@@ -11,8 +11,16 @@ public class BOX : MonoBehaviour
 
     [SerializeField] Camera m_camera;
 
+    [SerializeField] float speed;
+
+    private Rigidbody m_rigid;
     bool m_debuffs = false;
     float m_debuffsTime = 3.0f;
+
+    private void Awake()
+    {
+        m_rigid = this.GetComponent<Rigidbody>();
+    }
 
     public void InitStageControl(StageControl stageControl)
     {
@@ -22,6 +30,8 @@ public class BOX : MonoBehaviour
 
     private void Update()
     {
+        if (m_stageControl.Pause == true) return;
+
         if (m_debuffs == true)
         {
             m_debuffsTime -= Time.deltaTime;
@@ -30,28 +40,43 @@ public class BOX : MonoBehaviour
                 m_debuffsTime = 3.0f;
                 m_debuffs = false;
                 this.transform.localScale = new Vector3(2.5f, 1.5f, 1.0f);
+                speed = 10f;
             }
         }
     }
 
-    public void OnMouseDrag()
+    private void FixedUpdate()
     {
+        if (m_stageControl.Pause == true) return;
 
-        Vector3 mousePosition = new Vector3
-            (Input.mousePosition.x, Input.mousePosition.y , 10);
-        float x;
-        float y = transform.position.y;
-        float z = transform.position.z;
-        this.transform.position = m_camera.ScreenToWorldPoint(mousePosition);
+        float inputX = Input.GetAxis("Horizontal");
 
-        x = transform.position.x;
-        if (x < -5f)
-        this.transform.position = new Vector3(-5f, y, z);
-        else if(x>5f)
-        this.transform.position = new Vector3(5f, y, z);
-        else
-        this.transform.position = new Vector3(x, y, z);
+        Vector3 velocity = new Vector3(inputX, 0, 0);
+
+        velocity *= speed;
+
+        m_rigid.velocity = velocity;
+
     }
+
+    //public void OnMouseDrag()
+    //{
+
+    //    Vector3 mousePosition = new Vector3
+    //        (Input.mousePosition.x, Input.mousePosition.y , 10);
+    //    float x;
+    //    float y = transform.position.y;
+    //    float z = transform.position.z;
+    //    this.transform.position = m_camera.ScreenToWorldPoint(mousePosition);
+
+    //    x = transform.position.x;
+    //    if (x < -5f)
+    //    this.transform.position = new Vector3(-5f, y, z);
+    //    else if(x>5f)
+    //    this.transform.position = new Vector3(5f, y, z);
+    //    else
+    //    this.transform.position = new Vector3(x, y, z);
+    //}
 
     public void OnTriggerEnter(Collider other)
     {
@@ -65,5 +90,6 @@ public class BOX : MonoBehaviour
     {
         m_debuffs = true;
         this.transform.localScale = new Vector3(1.2f, 1.0f, 1.0f);
+        speed = 6f;
     }
 }

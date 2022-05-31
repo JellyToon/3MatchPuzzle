@@ -47,6 +47,8 @@ public class BlockRoot : MonoBehaviour
 
     private void Update()
     {
+        if (m_stageControl.Pause == true) return;
+
         Vector3 mousePosition;
 
         unprojectMousePosition(out mousePosition, Input.mousePosition);
