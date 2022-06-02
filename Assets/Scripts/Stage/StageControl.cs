@@ -96,6 +96,9 @@ public class StageControl : MonoBehaviour
     public void InitStage()
     {
         m_stageInfo = StageReader.LoadStage(m_stageNum);
+        Debug.Log(m_stageNum);
+        Debug.Log(m_stageInfo.maxRow);
+        Debug.Log(m_stageInfo.maxCol);
 
         m_cellInfos = new CellInfo[m_stageInfo.maxRow, m_stageInfo.maxCol];
         m_blocks = new Block[m_stageInfo.maxRow, m_stageInfo.maxCol];
@@ -119,6 +122,8 @@ public class StageControl : MonoBehaviour
 
         InitBlockRoot();
         InitClearCondition();
+
+        time = (float)m_stageInfo.timer;
     }
 
     private void InitBlockRoot()
@@ -219,7 +224,7 @@ public class StageControl : MonoBehaviour
             random = Random.Range(0, (int)BlockColor.NUM);
             if(m_clearCondition[random] == -1)
             {
-                m_clearCondition[random] = Random.Range(15,20);
+                m_clearCondition[random] = Random.Range(m_stageInfo.minRange,m_stageInfo.maxRange);
                 m_clearColors.Add(random);
                 ++i;
 

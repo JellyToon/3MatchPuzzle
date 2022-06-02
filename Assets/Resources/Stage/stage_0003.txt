@@ -3,6 +3,9 @@
     "maxCol":9,
     "clearColorNumCount" : 3,
     "trapColorNumCount" : 1,
+    "minRange" : 10,
+    "maxRange" : 15,
+    "timer" : 70,
     "cells":[
                 0,1,1,1,1,1,1,1,0,
                 1,1,1,1,1,1,1,1,1,

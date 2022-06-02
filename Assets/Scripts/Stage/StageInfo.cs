@@ -13,6 +13,11 @@ public class StageInfo
     public int clearColorNumCount;
     public int trapColorNumCount;
 
+    public int minRange;
+    public int maxRange;
+
+    public int timer;
+
     public override string ToString()
     {
         return JsonUtility.ToJson(this);
