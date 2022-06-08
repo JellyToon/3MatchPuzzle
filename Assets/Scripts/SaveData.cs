@@ -19,6 +19,7 @@ public class SaveData : ScriptableObject
 
     public void SetSaveDataTrue(int num)
     {
+        Debug.Log(num - 1);
         m_stageData[num-1] = true;
     }
 }

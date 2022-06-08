@@ -25,7 +25,6 @@ public class StageControl : MonoBehaviour
     //[SerializeField] Text m_text;
     [SerializeField] Text m_timer;
     [SerializeField] CanvasGroup m_option;
-    [SerializeField] SaveData m_saveData;
 
     private bool m_pause;
     public bool Pause { get { return m_pause; } }
@@ -120,9 +119,9 @@ public class StageControl : MonoBehaviour
             }
         }
 
-        InitBlockRoot();
         InitClearCondition();
-
+        Shuffle();
+        InitBlockRoot();
         time = (float)m_stageInfo.timer;
     }
 
@@ -253,17 +252,6 @@ public class StageControl : MonoBehaviour
                 continue;
             }
         }
-
-        //m_text.text = "";
-        //for(i = 0; i<m_stageInfo.clearColorNumCount + m_stageInfo.trapColorNumCount;++i)
-        //{
-        //    if (i < m_stageInfo.clearColorNumCount)
-        //        m_text.text +=
-        //            ((BlockColor)(m_clearColor[i])).ToString() + " : " + m_clearCondition[m_clearColor[i]] + "\n";
-        //    else
-        //        m_text.text += "X : " + ((BlockColor)(m_trapColor[i-m_stageInfo.clearColorNumCount])).ToString();
-        //}
-        
     }
 
     public void AddItem(BlockColor color, Vector3 initPosition)
@@ -341,7 +329,7 @@ public class StageControl : MonoBehaviour
 
         if(length == 0)
         {
-            m_saveData.SetSaveDataTrue(m_stageNum + 1);
+            DataSave.instance.SetSaveDataTrue(m_stageNum);
             GoToScene("Clear");
         }
     }
@@ -354,5 +342,107 @@ public class StageControl : MonoBehaviour
     public void ExitButtonClick()
     {
         Application.Quit();
+    }
+
+    private void Shuffle()
+    {
+        Block block;
+        BlockColor color;
+
+        for (int row = 0; row < m_stageInfo.maxRow; ++row)
+        {
+            for (int col = 0; col < m_stageInfo.maxCol; ++col)
+            {
+                block = m_blocks[row, col];
+                while(CheckConnection(block) == true)
+                {
+                    color = (BlockColor)Random.Range(0, (int)BlockColor.NUM);
+                    block.SetColor(color);
+                }
+            }
+        }
+    }
+
+    private bool CheckConnection(Block start)
+    {
+        bool ret = false;
+
+        int normalBlockNum = 0;
+        if (start.IsVanishing() == false)
+            normalBlockNum = 1;
+
+        int rx = start.info.position.x;
+        int lx = start.info.position.x;
+
+
+        Block nextBlock;
+        for (int x = lx - 1; x > 0; --x)
+        {
+            nextBlock = m_blocks[x, start.info.position.y];
+            if (nextBlock.info.type == BlockType.EMPTY) break;
+            if (nextBlock.info.color != start.info.color) break;
+
+            //if (nextBlock.IsVanishing() == false)
+            normalBlockNum += 1;
+            lx = x;
+        }
+
+        for (int x = rx + 1; x < m_stageInfo.maxRow; ++x)
+        {
+            nextBlock = m_blocks[x, start.info.position.y];
+
+            if (nextBlock.info.type == BlockType.EMPTY) break;
+            if (nextBlock.info.color != start.info.color) break;
+
+            //if (nextBlock.IsVanishing() == false) 
+            normalBlockNum += 1;
+            rx = x;
+        }
+
+        do
+        {
+            if ((rx - lx + 1) < 3) break;
+            if (normalBlockNum == 0) break;
+            
+            ret = true;
+        } while (false);
+
+        normalBlockNum = 0;
+        if (start.IsVanishing() == false) normalBlockNum = 1;
+
+        int uy = start.info.position.y;
+        int dy = start.info.position.y;
+
+        for (int y = dy - 1; y > 0; --y)
+        {
+            nextBlock = m_blocks[start.info.position.x, y];
+
+            if (nextBlock.info.type == BlockType.EMPTY) break;
+            if (nextBlock.info.color != start.info.color) break;
+
+            //if (nextBlock.IsVanishing() == false) 
+            normalBlockNum += 1;
+            dy = y;
+        }
+        for (int y = uy + 1; y < m_stageInfo.maxCol; ++y)
+        {
+            nextBlock = m_blocks[start.info.position.x, y];
+
+            if (nextBlock.info.type == BlockType.EMPTY) break;
+            if (nextBlock.info.color != start.info.color) break;
+
+            normalBlockNum += 1;
+            uy = y;
+        }
+
+        do
+        {
+            if (uy - dy + 1 < 3) break;
+            if (normalBlockNum == 0) break;
+
+            ret = true;
+        } while (false);
+
+        return ret;
     }
 }

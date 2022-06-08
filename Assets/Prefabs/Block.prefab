@@ -108,5 +108,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8eb1115b6c0b784497827c830531ef0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_slideDir4: -1
   m_blockInfo:
     m_blockType: 0
+    m_blockColor: 0
+    m_blockState: 0
+  m_nextState: -1
+  m_vanishTimer: -1
+  m_stepTimer: 0

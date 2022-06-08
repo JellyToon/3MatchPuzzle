@@ -82,7 +82,7 @@ public class Block : MonoBehaviour
                 color = Color.blue;
                 break;
             case BlockColor.ORANGE:
-                color = new Color(1.0f, 0.46f, 0.0f);
+                color = new Color(0.8f, 0.46f, 0.0f);
                 break;
             case BlockColor.YELLOW:
                 color = Color.yellow;
@@ -210,7 +210,7 @@ public class Block : MonoBehaviour
                 m_afterPosition = Vector3.Lerp(m_beforePosition, Vector3.zero, rate);
                 break;
             case BlockState.FALL:
-                m_fall.velocity += Physics.gravity.y * Time.deltaTime * 0.3f;
+                m_fall.velocity += Physics.gravity.y * Time.deltaTime * 0.9f;
                 m_afterPosition.y += this.m_fall.velocity * Time.deltaTime;
                 if (m_afterPosition.y < 0.0f)
                     m_afterPosition.y = 0.0f;

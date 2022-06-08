@@ -51,11 +51,12 @@ public class BOX : MonoBehaviour
 
         float inputX = Input.GetAxis("Horizontal");
 
-        Vector3 velocity = new Vector3(inputX, 0, 0);
+        transform.Translate(inputX * speed * Time.deltaTime, 0, 0);
 
-        velocity *= speed;
-
-        m_rigid.velocity = velocity;
+       if(transform.position.x > 4.5f)
+            transform.position = new Vector3(4.5f, transform.position.y, transform.position.z);
+        if (transform.position.x < -4.5f)
+            transform.position = new Vector3(-4.5f, transform.position.y, transform.position.z);
 
     }
 

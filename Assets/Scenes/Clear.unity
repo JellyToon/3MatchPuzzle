@@ -207,8 +207,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1524529316}
-        m_TargetAssemblyTypeName: Title, Assembly-CSharp
-        m_MethodName: ClickExitButton
+        m_TargetAssemblyTypeName: Clear, Assembly-CSharp
+        m_MethodName: ClickGoToMain
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -315,7 +315,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 60
+    m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 5
@@ -326,7 +326,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Exit
+  m_Text: "\uBA54\uC778\uD654\uBA74\uC73C\uB85C"
 --- !u!222 &344071246
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -419,8 +419,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1524529316}
-        m_TargetAssemblyTypeName: Title, Assembly-CSharp
-        m_MethodName: ClickReStart
+        m_TargetAssemblyTypeName: Clear, Assembly-CSharp
+        m_MethodName: ClickNextStageButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -740,7 +740,7 @@ GameObject:
   - component: {fileID: 1524529315}
   - component: {fileID: 1524529316}
   m_Layer: 0
-  m_Name: Title
+  m_Name: Clear
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -769,10 +769,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1524529314}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e143ff7aeddf2da4bbbcdeb180894379, type: 3}
+  m_Script: {fileID: 11500000, guid: 68098dbabd911db4fa3c94dd9aedb975, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasGroup: {fileID: 0}
+  m_nextButton: {fileID: 734803651}
 --- !u!1 &1729866062
 GameObject:
   m_ObjectHideFlags: 0
@@ -1070,10 +1070,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 60
+    m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 5
+    m_MinSize: 4
     m_MaxSize: 60
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -1081,7 +1081,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Go To Main
+  m_Text: "\uB2E4\uC74C\uC2A4\uD14C\uC774\uC9C0"
 --- !u!222 &1972815501
 CanvasRenderer:
   m_ObjectHideFlags: 0

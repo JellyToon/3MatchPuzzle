@@ -362,10 +362,8 @@ public class BlockRoot : MonoBehaviour
             if ((rx - lx + 1) < 3) break;
             if (normalBlockNum == 0) break;
             for (int x = lx; x < rx + 1; ++x)
-            {
                 m_blocks[x, start.info.position.y].ToVanishing();
-                ret = true;
-            }
+            ret = true;
         } while (false);
 
         normalBlockNum = 0;
@@ -405,15 +403,12 @@ public class BlockRoot : MonoBehaviour
             if (normalBlockNum == 0) break;
 
             for (int y = dy; y < uy + 1; ++y)
-            {
                 m_blocks[start.info.position.x, y].ToVanishing();
-                ret = true;
-            }
+            ret = true;
         } while (false);
 
         return ret;
     }
-
 
     public void FallBlock(Block upBlock, DIR4 dir, Block dwBlock)
     {

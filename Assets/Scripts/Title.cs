@@ -9,8 +9,6 @@ public class Title : MonoBehaviour
     public CanvasGroup m_selectGroup;
     public CanvasGroup m_manualGroup;
 
-    [SerializeField] SaveData m_saveData;
-    [SerializeField] bool[] m_stage;
 
     [SerializeField] Button[] m_stageButton;
 
@@ -18,13 +16,10 @@ public class Title : MonoBehaviour
     {
         Screen.SetResolution(1600, 900, false);
 
-        if (m_saveData == null) return;
-        m_stage = new bool[m_saveData.GetSaveDataLength()];
-        m_stage = m_saveData.GetSaveData();
-
-        for(int i = 0; i<m_stage.Length;++i)
+        bool[] stage = DataSave.instance.stage;
+        for (int i = 0; i<stage.Length;++i)
         {
-            if(m_stage[i] == true)
+            if(stage[i] == true)
                 m_stageButton[i].interactable = true;
             else
                 m_stageButton[i].interactable = false;
@@ -49,13 +44,16 @@ public class Title : MonoBehaviour
         m_manualGroup.blocksRaycasts = true;
     }
 
-    public void ClickManualExitButton()
+    public void ClickStageExitButton()
     {
         m_selectGroup.alpha = 0.0f;
         m_selectGroup.blocksRaycasts = false;
+    }
+
+    public void ClickManualExitButton()
+    {
         m_manualGroup.alpha = 0.0f;
         m_manualGroup.blocksRaycasts = false;
-
     }
 
 
