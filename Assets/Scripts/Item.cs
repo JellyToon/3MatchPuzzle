@@ -63,7 +63,7 @@ public class Item : MonoBehaviour
     {
         if (m_stageControl.Pause == true) return;
 
-        m_fallVelocity += Physics.gravity.y * Time.deltaTime * 0.025f;
+        m_fallVelocity += Physics.gravity.y * Time.deltaTime * 0.020f;
         this.transform.position = new Vector3
             (this.transform.position.x, this.transform.position.y + m_fallVelocity, this.transform.position.z);
     }

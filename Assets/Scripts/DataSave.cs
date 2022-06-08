@@ -29,9 +29,12 @@ public class DataSave : MonoBehaviour
 
     public void SetSaveDataTrue(int stageNum)
     {
-        if (stageNum == stage.Length) return;
-
-        nextStage = stageNum+1;
-        saveData.SetSaveDataTrue(stageNum+1);
+        if (stageNum < stage.Length)
+        {
+            nextStage = stageNum + 1;
+            saveData.SetSaveDataTrue(stageNum + 1);
+        }
+        else
+            nextStage = 0;
     }
 }

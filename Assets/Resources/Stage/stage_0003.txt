@@ -5,7 +5,7 @@
     "trapColorNumCount" : 1,
     "minRange" : 15,
     "maxRange" : 20,
-    "timer" : 70,
+    "timer" : 80,
     "cells":[
                 0,1,1,1,1,1,1,1,0,
                 1,0,1,1,1,1,1,0,1,

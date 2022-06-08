@@ -17,7 +17,6 @@ public class Clear : MonoBehaviour
     }
     public void ClickNextStageButton()
     {
-        
         string stage = "Stage" + DataSave.instance.nextStage;
 
         SceneManager.LoadScene(stage);
